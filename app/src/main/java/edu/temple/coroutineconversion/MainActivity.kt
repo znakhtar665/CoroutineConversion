@@ -6,14 +6,24 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
     //TODO (Refactor to replace Thread code with coroutines)
 
-    lateinit var cakeImageView: ImageView
+    private val cakeImageView: ImageView by lazy {
+        findViewById(R.id.imageView)
+    }
+
+    private val currentTextView: TextView by lazy {
+        findViewById(R.id.currentTextView)
+    }
 
     val handler = Handler(Looper.getMainLooper(), Handler.Callback {
+
+        currentTextView.text = String.format(Locale.getDefault(), "Current opacity: %d", it.what)
         cakeImageView.alpha = it.what / 100f
         true
     })
@@ -21,8 +31,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        cakeImageView = findViewById(R.id.imageView)
 
         findViewById<Button>(R.id.revealButton).setOnClickListener{
             Thread{
